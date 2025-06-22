@@ -25,7 +25,7 @@ async function initVue() {
         navItems.value = result.data;
 
     } catch (err) {
-        console.error('Error fetching game data:', err);
+        console.error('Error fetching data:', err);
     }
 
 }
