@@ -3,10 +3,10 @@
         <h1>Home</h1>
         <div class="login-box">
             <h2>Login</h2>
-            <form @sumbit.prevent="handleLogin">
+            <form @submit.prevent="handleLogin">
                 <input v-model="email" type="email" placeholder="Email" required />
                 <input v-model="password" type="password" placeholder="Password" required />
-                <button type="sumbit">Login</button>
+                <button type="submit">Login</button>
             </form>
             <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         </div>
@@ -25,10 +25,14 @@ const password = ref('');
 const errorMessage = ref('');
 
 const handleLogin = async () => {
+    console.log('Trying to log in with:', email.value, password.value);
+
     const { data, error } = await supabase.auth.signInWithPassword({
         email: email.value,
         password: password.value
     })
+
+    console.log(data, error);
     if (error) {
         errorMessage.value = error.message;
     } else {
