@@ -11,11 +11,26 @@
 </template>
 
 <script setup>
+import { ref, onMounted, computed, watch, reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import NavApi from '../api/NavApi'
 
 const router = useRouter();
-
+const navApi = new NavApi();
 const navItems = ref([]);
+async function initVue() {
+    try {
+        const result = await navApi.getNavigationForHome();
+        console.log(result);
+        navItems.value = result.data;
+
+    } catch (err) {
+        console.error('Error fetching game data:', err);
+    }
+
+}
+
+onMounted(() => initVue());
 
 const goTo = (route) => {
     router.push(route);

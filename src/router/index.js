@@ -6,7 +6,7 @@ import Dashboard      from '../views/Dashboard.vue'
 const routes = [
   { path: '/',                  component: Home  },
   { path: '/about',             component: About },
-  { path: '/dashbaord',         component: Dashboard }
+  { path: '/dashboard',         component: Dashboard }
 ]
 
 export default createRouter({
