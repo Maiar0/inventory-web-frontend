@@ -25,4 +25,22 @@ export default class NavApi{
         }
         return res.json();
     }
+    async getNavigation(path){
+        console.log('Requesting Nav:', path )
+        const token = await getAccessToken();
+        const res = await fetch (this.baseUrl + '/nav' + path, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if(!res.ok){
+            const { error } = await res.json();
+            const err = new Error(error.message);
+            err.code = error.code;
+            throw err;
+        }
+        return res.json();
+    }
 }

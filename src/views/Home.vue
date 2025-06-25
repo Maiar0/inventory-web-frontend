@@ -37,6 +37,7 @@ const handleLogin = async () => {
         errorMessage.value = error.message;
     } else {
         errorMessage.value = '';
+        localStorage.setItem('username', email.value);
         router.push('/dashboard');
     }
 }
