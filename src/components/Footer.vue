@@ -10,15 +10,13 @@
 
 <style scoped>
 .footer {
-    background-color: black;
-    padding: 20px;
-    text-align: center;
-    position: fixed;
-    bottom: 0;
-    height: 1vh;
-    width: 100%;
-    left: 0;
+  background-color: black;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  width: 100%;
 }
+
 .footer a {
     color: #007bff;
     text-decoration: none;

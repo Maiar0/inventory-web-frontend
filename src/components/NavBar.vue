@@ -8,6 +8,7 @@
     <div class="navbar_buttons">
       <button @click="goHome">Home</button>
       <button @click="goAbout">About</button>
+      <button @click="testMe">Test</button>
     </div>
   </nav>
 </template>
@@ -21,6 +22,10 @@ const goHome = () => {
 const goAbout = () => {
   router.push('/about');
 }
+//for testing vues
+const testMe = () => {
+  router.push('/test');
+}
 </script>
 
 <style scoped>
@@ -29,12 +34,7 @@ const goAbout = () => {
   color: white;
   padding: 20px;
   text-align: center;
-  position: fixed;
-  top: 0;
-  height: 8vh;
   width: 100%;
-  left: 0;
-  z-index: 1000;
 }
 
 .navbar_buttons {
