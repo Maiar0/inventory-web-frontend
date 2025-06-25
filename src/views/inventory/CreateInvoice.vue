@@ -1,4 +1,5 @@
 <template>
+    <button @click="openProductHelper">🔍 Search Products</button>
     <div class="invoice-form">
         <section class="section">
             <h2>Invoice Details</h2>
@@ -82,8 +83,8 @@
                             </li>
                         </ul>
                         </td>
-                        <td><input v-modal="item.quantity" type="number" /> </td>
-                        <td><input v-modal="item.unit_cost" type="number" step="0.01"/> </td>
+                        <td><input v-model="item.quantity" type="number" /> </td>
+                        <td><input v-model="item.unit_cost" type="number" step="0.01"/> </td>
                         <td><input :value="item.quantity * item.unit_cost" disabled /></td>
                         <td><button @click="removeItem(index)">Remove</button></td>
                     </tr>
@@ -142,7 +143,7 @@ function removeItem(index){
 }
 const computedInvoiceTotal = computed(() =>{
     const subtotal = invoiceItems.reduceRight((sum, item) => sum + item.quantity * item.unit_cost, 0);
-    const tax = invoice.tax_amount || (invoice.tax_rate ? (subtotal + invoice.shipping_cost)* (invoice.tax_rate / 100) : 0);
+    const tax = invoice.tax_amount || (invoice.tax_rate ? (subtotal )* (invoice.tax_rate / 100) : 0);
     return (subtotal + invoice.shipping_cost + tax).toFixed(2);
 })
 function submitForm(){
@@ -150,6 +151,9 @@ function submitForm(){
 }
 function cancelForm(){
     console.log('cancel form');
+}
+function openProductHelper(){
+    window.open('productId-directory.html', '_blank', 'width=800', 'height=800');
 }
 </script>
 <style scoped>

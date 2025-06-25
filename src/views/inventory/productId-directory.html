@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Product Directory</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    .product-entry {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+    .product-entry a {
+      margin-left: 10px;
+      color: blue;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Product Directory</h1>
+  <input type="text" id="search" placeholder="Search by ID or Name..." />
+  <div id="product-list"></div>
+
+  <script>
+    const API_URL = '/api/products'; // Replace with actual endpoint
+    let allProducts = [];
+
+    const searchInput = document.getElementById('search');
+    const productList = document.getElementById('product-list');
+
+    function render(products) {
+      productList.innerHTML = '';
+      products.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-entry';
+        div.innerHTML = `
+          <strong>${p.product_id}</strong> — ${p.name}
+          <a href="/product/${p.product_id}" target="_blank">View</a>
+        `;
+        productList.appendChild(div);
+      });
+    }
+
+    function filterList() {
+      const query = searchInput.value.toLowerCase();
+      const filtered = allProducts.filter(p =>
+        p.product_id.toLowerCase().includes(query) ||
+        p.name.toLowerCase().includes(query)
+      );
+      render(filtered);
+    }
+
+    // Fetch product list on load
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(data => {
+        allProducts = data;
+        render(allProducts);
+      })
+      .catch(err => {
+        productList.innerHTML = `<p style="color: red;">Failed to load product list.</p>`;
+        console.error('Error fetching products:', err);
+      });
+
+    searchInput.addEventListener('input', filterList);
+  </script>
+</body>
+</html>
