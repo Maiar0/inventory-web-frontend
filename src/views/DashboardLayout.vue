@@ -1,6 +1,6 @@
 <template>
     <div>
-        <DashboardHeader :breadcrumb="breadcrumb" />
+        <DashboardHeader />
         <router-view />
     </div>
 </template>
@@ -8,6 +8,4 @@
 import DashboardHeader from '../components/DashboardHeader.vue'; // Adjust path as needed
 import { ref } from 'vue';
 
-// This can be dynamically computed based on route if needed
-const breadcrumb = ref(['Dashboard']);
 </script>

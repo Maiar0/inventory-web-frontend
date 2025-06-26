@@ -1,10 +1,11 @@
 <template>
     <header class="dashboard-header">
-        <div class="breadcrumb">
-            <span v-for="(crumb, index) in breadcrumb" :key="index">
-                {{ crumb }} <span v-if="index < breadcrumb.length - 1">/</span>
-            </span>
-        </div>
+        <ul class="breadcrumb">
+            <li v-for="(item, i) in breadcrumb" :key="i">
+                {{ item }}
+                <span v-if="i < breadcrumb.length - 1"> / </span>
+            </li>
+        </ul>
         <div class="user-info">
             Logged in as: <strong>{{ username }}</strong>
         </div>
@@ -12,12 +13,15 @@
 </template>
 
 <script setup>
-defineProps({
-    breadcrumb: {
-        type: Array,
-        required: true
-    }
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+const route = useRoute();
+
+const breadcrumb = computed(() => {
+    console.log(route.path)
+    return route.path.split('/').filter(Boolean).map(segment => segment.charAt(0).toUpperCase() + segment.slice(1));
 });
+
 const username = localStorage.getItem('username');
 </script>
 
@@ -33,10 +37,20 @@ const username = localStorage.getItem('username');
 }
 
 .breadcrumb {
-    font-size: 0.9rem;
+    display: flex;
+    /* Apply here */
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .user-info {
     font-size: 0.9rem;
+}
+
+.breadcrumb li {
+    display: flex;
+    align-items: center;
 }
 </style>

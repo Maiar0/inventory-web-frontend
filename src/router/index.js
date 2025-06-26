@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home           from '../views/Home.vue'
 import About          from '../views/About.vue'
-import Dashboard      from '../views/Dashboard.vue'
 import DashboardLayout      from '../views/DashboardLayout.vue'
 import DashboardNav      from '../views/DashboardNav.vue'
 import CreateInvoice from '../views/inventory/CreateInvoice.vue'
@@ -28,7 +27,6 @@ const routes = [
   { path: '/home',              component: Home },
   { path: '/about',             component: About },
   { path: '/test',             component: CreateInvoice }, //for testing vues
-  //{ path: '/dashboard',         component: Dashboard }
 ]
 
 export default createRouter({
