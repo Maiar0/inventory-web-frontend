@@ -8,22 +8,45 @@ import { useRoute, useRouter } from 'vue-router';
 import NavApi from '../api/NavApi';
 import NavGrid from '../components/NavGrid.vue';
 
-const navItems = ref([]);
+const navItems = ref([
+    {
+        name: 'Inventory Catalog',
+        description: 'View and manage items currently in stock',
+        route: '/inventory/catalog'
+    },
+    {
+        name: 'Inventory Catalog Create',
+        description: 'View and manage items currently in stock',
+        route: '/catalog/create'
+    },
+    {
+        name: 'Create Invoice',
+        description: 'Generate a new invoice for outgoing products',
+        route: '/invoices/create'
+    },
+    {
+        name: 'Reports',
+        description: 'Analyze inventory trends and system activity',
+        route: 'reports'
+    },
+    {
+        name: 'User Management',
+        description: 'Manage application users and access control',
+        route: 'admin/users'
+    },
+    {
+        name: 'Settings',
+        description: 'Configure system preferences and application settings',
+        route: 'settings'
+    }
+]);
 const route = useRoute();
 const router = useRouter();
-
-async function fetchNav() {
-    const path = route.path.replace(/^\/dashboard/, '') || '/';
-    console.log(path);
-    const result = await new NavApi().getNavigation(path); // pass current location
-    console.log(result.data)
-    navItems.value = Array.isArray(result.data) ? result.data : [result.data];
-}
-
-onMounted(fetchNav);
-watch(() => route.fullPath, fetchNav); // refetch when path changes
-
+onMounted(() => {
+    console.log('navItems:', navItems.value);
+});
 function goDeeper(newPath) {
-    router.push(`/dashboard${newPath}`);
+    console.log(newPath)
+    router.push(newPath);
 }
 </script>

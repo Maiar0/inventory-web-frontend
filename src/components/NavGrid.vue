@@ -8,8 +8,15 @@
 </template>
 
 <script setup>
-defineProps({ items: Array });
-defineEmits(['select']);
+import { onMounted } from 'vue';
+
+
+defineProps({
+    items: {
+        type: Array,
+        required: true
+    }
+});
 </script>
 
 <style scoped>
