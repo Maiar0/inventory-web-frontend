@@ -44,6 +44,7 @@ defineProps({
 }
 
 .grid-item h2 {
+    color: white;
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
 }
