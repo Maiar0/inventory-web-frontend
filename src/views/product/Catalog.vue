@@ -3,7 +3,7 @@
     <CatalogGrid :items="catalogItems" @select="goToItem" @addToCart="addItemToCart" />
 </template>
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import CatalogGrid from '../../components/CatalogGrid.vue'
 import CatalogHeader from '../../components/CatalogHeader.vue';
@@ -62,5 +62,19 @@ function goToCart(where) {
     console.log('clicked cart')
     //go to cart page
 }
+onMounted(() => {
+    const stored = localStorage.getItem('cart');
+    if (stored) {
+        try {
+            const parsedCart = JSON.parse(stored);
+            cart.splice(0, cart.length, ...parsedCart);
+        } catch (e) {
+            console.warn('Failed to parse saved cart:', e);
+        }
+    }
+});
+watch(cart, (newCart) => {
+    localStorage.setItem('cart', JSON.stringify(newCart));
+}, { deep: true });
 
 </script>

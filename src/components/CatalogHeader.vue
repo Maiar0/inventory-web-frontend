@@ -18,14 +18,7 @@ const props = defineProps({
         type: Number,
         default: 0
     }
-})
-watch(
-    () => props.numberOfItems,
-    (newVal, oldVal) => {
-        console.log(`numberOfItems changed from ${oldVal} to ${newVal}`);
-        // optionally trigger animation, badge effect, etc.
-    }
-);
+});
 </script>
 <style scoped>
 .cart-wrapper {
