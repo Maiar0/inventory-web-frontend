@@ -1,13 +1,15 @@
 <template>
     <CatalogHeader :numberOfItems="cart.length" @select="goToCart" />
-    <CatalogGrid :items="catalogItems" @select="goToItem" @addToCart="addItemToCart" />
+    <input class="filter" v-model="searchQuery" type="text" placeholder="Search Products" />
+    <CatalogGrid :items="catalogFilteredItems" @select="goToItem" @addToCart="addItemToCart" />
 </template>
 <script setup>
-import { ref, reactive, onMounted, watch } from 'vue';
+import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import CatalogGrid from '../../components/CatalogGrid.vue'
 import CatalogHeader from '../../components/CatalogHeader.vue';
 const cart = reactive([]);
+const searchQuery = ref('');
 const catalogItems = ref([
     {
         product_id: 'P001',
@@ -50,6 +52,16 @@ const catalogItems = ref([
         price: '$49.00'
     }
 ]);
+
+const catalogFilteredItems = computed(() => {
+    if (!searchQuery.value) return catalogItems.value;
+    const q = searchQuery.value.toLocaleLowerCase();
+    return catalogItems.value.filter(item =>
+        item.name.toLocaleLowerCase().includes(q) ||
+        item.sku.toLocaleLowerCase().includes(q) ||
+        item.product_id.toLocaleLowerCase().includes(q)
+    );
+});
 function goToItem() {
     console.log('click go to item')
     //will go to product page
@@ -78,3 +90,13 @@ watch(cart, (newCart) => {
 }, { deep: true });
 
 </script>
+<style scoped>
+.filter {
+    display: block;
+    width: 60%;
+    margin: 10px auto;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+</style>
