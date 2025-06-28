@@ -5,6 +5,7 @@ import DashboardLayout      from '../views/DashboardLayout.vue'
 import DashboardNav from '../views/DashboardNav.vue'
 import CreateInvoice from '../views/stock/CreateInvoice.vue'
 import CreateProduct from '../views/product/CreateProduct.vue'
+import Catalog from '../views/product/Catalog.vue'
 
 const routes = [
   { path: '/dashboard',                   component: DashboardLayout },
@@ -14,6 +15,7 @@ const routes = [
   { path: '/test',                        component: About }, //for testing vues
   { path: '/invoices/create',             component: CreateInvoice,       meta: {requiredPermission: {action: 'create', resource: 'stock'}} }, 
   { path: '/catalog/create',              component: CreateProduct,       meta: {requiredPermission: {action: 'create', resource: 'product'}} }, 
+  { path: '/catalog',                     component: Catalog,       meta: {requiredPermission: {action: 'view', resource: 'product'}} }, 
 ]
 
 export default createRouter({

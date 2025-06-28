@@ -1,35 +1,30 @@
 <template>
-    <div class="catalog-grid">
-        <div v-for="item in items" :key="item.name" class="grid-item" @click="$emit('select', item.route)">
-            <img
-                v-if="item.image"
-                :src="item.image"
-                alt="Product Image"
-                class="item-image"
-            />   
-            <h2> {{ item.name }} </h2>
-            <p class="description">{{ item.description }}</p>
-            <p class="price">{{ item.price }}</p>
-            <div class="purchases">
-                <input v-model="quantities[item.id]" type="number" min="1" step="1"/>
-                <button @click="addItem(item.id)">+</button>
-            </div>
-        </div>
+  <div class="catalog-grid">
+    <div v-for="item in items" :key="item.name" class="grid-item">
+      <img v-if="item.image" :src="item.image" alt="Product Image" class="item-image" />
+      <h2 @click="$emit('select', item.route)"> {{ item.name }} </h2>
+      <p class="description">{{ item.description }}</p>
+      <p class="price">{{ item.price }}</p>
+      <div class="purchases">
+        <input v-model="quantities[item.id]" type="number" min="1" step="1" />
+        <button @click="addItem(item.product_id)">+</button>
+      </div>
     </div>
+  </div>
 </template>
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 const quantities = ref({});
-const emit = defineEmits(['addToCart']);
+const emit = defineEmits(['select', 'addToCart']);
 defineProps({
-    items: {
-        type: Array,
-        required: true
-    }
+  items: {
+    type: Array,
+    required: true
+  }
 });
-function addItem(id){
-    const quantity = quantities.value[id] || 1;
-    emit('addToCart',{id, quantity});
+function addItem(id) {
+  const quantity = quantities.value[id] || 1;
+  emit('addToCart', { id, quantity });
 }
 </script>
 <style scoped>

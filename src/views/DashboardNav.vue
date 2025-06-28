@@ -12,7 +12,7 @@ const navItems = ref([
     {
         name: 'Inventory Catalog',
         description: 'View and manage items currently in stock',
-        route: '/inventory/catalog'
+        route: '/catalog'
     },
     {
         name: 'Inventory Catalog Create',
