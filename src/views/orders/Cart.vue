@@ -1,5 +1,5 @@
 <template>
-    <div class="cart-grid">
+    <div v-if="items.length > 0" class="cart-grid">
         <div v-for="item in items" class="grid-item">
             <h2 @click="$emit('select', item.route)"> {{ item.name + ' : ' + item.product_id }} </h2>
             <img v-if="item.image_url" :src="backend_url + item.image_url" alt="Product Image" class="item-image" />
@@ -10,6 +10,9 @@
             <p class="total">{{ '$' + (item.quantity * item.price).toFixed(2) }}</p>
             <button class="delte" @click="deleteItem(item.product_id)">-</button>
         </div>
+    </div>
+    <div v-else class="empty-cart">
+        <p>Your cart is Empty!</p>
     </div>
 </template>
 <script setup>
