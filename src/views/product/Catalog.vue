@@ -1,5 +1,5 @@
 <template>
-    <CatalogHeader :numberOfItems="cart.length" @select="goToCart" />
+    <CatalogHeader @select="goToCart" />
     <input class="filter" v-model="searchQuery" type="text" placeholder="Search Products" />
     <CatalogGrid :items="catalogFilteredItems" @select="goToItem" @addToCart="addItemToCart" />
 </template>
@@ -8,7 +8,9 @@ import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import CatalogGrid from '../../components/CatalogGrid.vue'
 import CatalogHeader from '../../components/CatalogHeader.vue';
-const cart = reactive([]);
+import { useCart } from '../../composables/useCart';
+const { addItem } = useCart();
+const router = useRouter();
 const searchQuery = ref('');
 const catalogItems = ref([
     {
@@ -17,7 +19,7 @@ const catalogItems = ref([
         name: 'Industrial Hammer',
         description: 'Durable steel hammer used for heavy-duty work.',
         image_url: '/images/gecko.jpg',
-        price: '$19.99'
+        price: 19.99
     },
     {
         product_id: 'P002',
@@ -25,7 +27,7 @@ const catalogItems = ref([
         name: 'Electric Screwdriver',
         description: 'Rechargeable screwdriver with torque control.',
         image_url: '/images/gecko.jpg',
-        price: '$24.50'
+        price: 24.50
     },
     {
         product_id: 'P003',
@@ -33,7 +35,7 @@ const catalogItems = ref([
         name: 'Precision Wrench Set',
         description: '10-piece set with metric and imperial sizes.',
         image_url: '/images/gecko.jpg',
-        price: '$34.95'
+        price: 34.95
     },
     {
         product_id: 'P004',
@@ -41,7 +43,7 @@ const catalogItems = ref([
         name: 'Heavy-Duty Tape Measure',
         description: '25ft retractable tape with magnetic hook.',
         image_url: '/images/gecko.jpg',
-        price: '$9.75'
+        price: 9.75
     },
     {
         product_id: 'P005',
@@ -49,7 +51,7 @@ const catalogItems = ref([
         name: 'Cordless Drill',
         description: '18V drill with dual-speed settings and LED light.',
         image_url: '/images/gecko.jpg',
-        price: '$49.00'
+        price: 49.00
     }
 ]);
 
@@ -67,27 +69,12 @@ function goToItem() {
     //will go to product page
 }
 function addItemToCart(item) {
-    cart.push(item);
-    console.log(cart.length);
+    addItem(item.id, item.quantity);
 }
 function goToCart(where) {
     console.log('clicked cart')
-    //go to cart page
+    router.push('/cart')
 }
-onMounted(() => {
-    const stored = localStorage.getItem('cart');
-    if (stored) {
-        try {
-            const parsedCart = JSON.parse(stored);
-            cart.splice(0, cart.length, ...parsedCart);
-        } catch (e) {
-            console.warn('Failed to parse saved cart:', e);
-        }
-    }
-});
-watch(cart, (newCart) => {
-    localStorage.setItem('cart', JSON.stringify(newCart));
-}, { deep: true });
 
 </script>
 <style scoped>

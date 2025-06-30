@@ -11,14 +11,13 @@
 import { useRoute } from 'vue-router';
 import { computed, watch } from 'vue';
 import CartIcon from '../assets/cart-white.svg'
+import { useCart } from '../composables/useCart';
+const { cart } = useCart();
+
+const numberOfItems = computed(() => cart.value.length);
 const username = localStorage.getItem('username');
 const emit = defineEmits(['select'])
-const props = defineProps({
-    numberOfItems: {
-        type: Number,
-        default: 0
-    }
-});
+
 </script>
 <style scoped>
 .cart-wrapper {

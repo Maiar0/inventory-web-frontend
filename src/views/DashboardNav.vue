@@ -20,6 +20,11 @@ const navItems = ref([
         route: '/catalog/create'
     },
     {
+        name: 'Cart',
+        description: 'Cart of items to purchase',
+        route: '/cart'
+    },
+    {
         name: 'Create Invoice',
         description: 'Generate a new invoice for outgoing products',
         route: '/invoices/create'

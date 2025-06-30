@@ -5,7 +5,7 @@
       <h2 @click="$emit('select', item.route)"> {{ item.name }} </h2>
       <img v-if="item.image_url" :src="backend_url + item.image_url" alt="Product Image" class="item-image" />
       <p class="description">{{ item.description }}</p>
-      <p class="price">{{ item.price }}</p>
+      <p class="price">{{ '$' + (item.price).toFixed(2) }}</p>
       <div class="purchases">
         <input v-model="quantities[item.id]" type="number" min="1" step="1" />
         <button @click="addItem(item.product_id)">+</button>
