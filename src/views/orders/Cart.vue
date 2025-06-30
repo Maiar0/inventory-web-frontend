@@ -8,6 +8,7 @@
             <input v-model="item.quantity" type="number" step="1"
                 @input="changeQuantity(item.product_id, $event.target.value)" />
             <p class="total">{{ '$' + (item.quantity * item.price).toFixed(2) }}</p>
+            <button class="delte" @click="deleteItem(item.product_id)">-</button>
         </div>
     </div>
 </template>
