@@ -2,13 +2,14 @@
   <div class="catalog-grid">
     <div v-for="item in items" :key="item.name" class="grid-item">
 
-      <h2 @click="$emit('select', item.route)"> {{ item.name }} </h2>
+      <h2 @click="$emit('select', item.route)"> {{ item.name + ' : ' + item.product_id }} </h2>
       <img v-if="item.image_url" :src="backend_url + item.image_url" alt="Product Image" class="item-image" />
       <p class="description">{{ item.description }}</p>
       <p class="price">{{ '$' + (item.price).toFixed(2) }}</p>
       <div class="purchases">
-        <input v-model="quantities[item.id]" type="number" min="1" step="1" />
-        <button @click="addItem(item.product_id)">+</button>
+        <input :value="getQuantity(item.product_id)" type="number" min="1" step="1"
+          @input="e => updateQuantity(item.product_id, +e.target.value)" />
+        <button @click="addItem(item.product_id, getQuantity(item.product_id))">+</button>
       </div>
     </div>
   </div>
@@ -27,6 +28,12 @@ defineProps({
 function addItem(id) {
   const quantity = quantities.value[id] || 1;
   emit('addToCart', { id, quantity });
+}
+function getQuantity(id) {
+  return quantities.value[id] ?? 1;
+}
+function updateQuantity(id, val) {
+  quantities.value[id] = val;
 }
 </script>
 <style scoped>
