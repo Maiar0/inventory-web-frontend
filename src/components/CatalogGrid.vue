@@ -1,8 +1,9 @@
 <template>
   <div class="catalog-grid">
     <div v-for="item in items" :key="item.name" class="grid-item">
-      <img v-if="item.image" :src="item.image" alt="Product Image" class="item-image" />
+
       <h2 @click="$emit('select', item.route)"> {{ item.name }} </h2>
+      <img v-if="item.image_url" :src="backend_url + item.image_url" alt="Product Image" class="item-image" />
       <p class="description">{{ item.description }}</p>
       <p class="price">{{ item.price }}</p>
       <div class="purchases">
@@ -14,6 +15,7 @@
 </template>
 <script setup>
 import { onMounted, ref } from 'vue';
+const backend_url = import.meta.env.VITE_PUBLIC_URL
 const quantities = ref({});
 const emit = defineEmits(['select', 'addToCart']);
 defineProps({
