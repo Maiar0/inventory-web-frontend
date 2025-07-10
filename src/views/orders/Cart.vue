@@ -6,13 +6,18 @@
             <p class="description">{{ item.description }}</p>
             <p class="price">{{ '$' + (item.price).toFixed(2) }}</p>
             <input v-model="item.quantity" type="number" step="1"
-                @input="changeQuantity(item.product_id, $event.target.value)" />
+                @input="changeQuantity(item.product_id, $event.target.value)" min="1" />
             <p class="total">{{ '$' + (item.quantity * item.price).toFixed(2) }}</p>
-            <button class="delte" @click="deleteItem(item.product_id)">-</button>
+            <button class="delete" @click="deleteItem(item.product_id)">Delete</button>
         </div>
     </div>
     <div v-else class="empty-cart">
         <p>Your cart is Empty!</p>
+    </div>
+    <div class="cart-summary">
+        <p v-if="items.length > 0">Total: {{'$' + items.reduce((total, item) => total + (item.quantity * item.price),
+            0).toFixed(2)}}</p>
+        <button v-if="items.length > 0" @click="checkOut()">Checkout</button>
     </div>
 </template>
 <script setup>
@@ -32,7 +37,10 @@ const items = computed(() => {
         return null;
     }).filter(Boolean);
 });
-
+function checkOut() {
+    // Implement checkout logic here
+    console.log('Checkout with items:', items.value);
+}
 const catalogItems = ref([
     {
         product_id: 'P001',
@@ -80,3 +88,26 @@ function getItem(id) {
     //we will fetch from db either all items or paticular item to parse
 }
 </script>
+<style scoped>
+.cart-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.grid-item {
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.cart-summary {
+    display: flex;
+    max-width: 400px;
+    flex-direction: row;
+    padding: 10px;
+    border: white 1px solid;
+    background-color: rgb(17, 11, 75);
+}
+</style>

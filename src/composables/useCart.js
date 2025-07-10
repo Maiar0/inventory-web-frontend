@@ -36,6 +36,9 @@ export function useCart() {
     }
   }
   function changeQuantity(id, quantity){
+    if (quantity < 1) {
+      return;
+    }
     const index = cart.value.findIndex(item => item.product_id === id );
     if(index !== -1){
       cart.value[index].quantity = quantity;

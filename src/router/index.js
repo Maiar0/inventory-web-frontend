@@ -7,6 +7,7 @@ import CreateInvoice from '../views/stock/CreateInvoice.vue'
 import CreateProduct from '../views/product/CreateProduct.vue'
 import Catalog from '../views/product/Catalog.vue'
 import Cart from '../views/orders/Cart.vue'
+import Order from '../views/orders/Order.vue'
 
 const routes = [
   { path: '/dashboard',                   component: DashboardLayout },
@@ -18,6 +19,7 @@ const routes = [
   { path: '/catalog/create',              component: CreateProduct,       meta: {requiredPermission: {action: 'create', resource: 'product'}} }, 
   { path: '/catalog',                     component: Catalog,       meta: {requiredPermission: {action: 'view', resource: 'product'}} }, 
   { path: '/cart',                        component: Cart,       meta: {requiredPermission: {action: 'create', resource: 'order'}} }, 
+  { path: '/order',                       component: Order,       meta: {requiredPermission: {action: 'create', resource: 'order'}} }, 
 ]
 
 export default createRouter({
