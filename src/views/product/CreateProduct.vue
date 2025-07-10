@@ -17,7 +17,10 @@
                 </div>
                 <div class="form-row">
                     <label>Image:</label>
-                    <input type="file" @change="handleFileUpload" accept="image/*" />
+                    <input list="asset-options" v-model="item.image" />
+                    <datalist id="asset-options">
+                        <option v-for="asset in assets" :key="asset.name" :value="asset.name" />
+                    </datalist>
                 </div>
             </div>
         </section>
@@ -28,45 +31,38 @@
     </div>
 </template>
 <script setup>
-import { reactive, computed, ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import ApiFetch from '../../api/ApiFetch';
 import { useRouter } from 'vue-router'
 const router = useRouter();
-const productIds = ref([]);
-const item = reactive({
+const api = new ApiFetch();
+const item = ref({
     sku: '',
     name: '',
     description: '',
     image: ''
 })
-const selectedFile = ref(null);
-function handleFileUpload(e) {
-    selectedFile.value = e.target.files[0];
+const assets = ref([]);
+onMounted(() => {
+    fetchAssets();
+});
+async function fetchAssets() {// TODO:: we could abstract this multy use
+    try {
+        const result = await api.fetch('/asset/assets', {
+            method: 'GET'
+        })
+        console.log('Assets fetched:', result);
+        if (result && result.data) {
+            assets.value = result.data;
+        } else {
+            console.error('No data found in the response');
+        }
+    } catch (error) {
+        console.error('Error fetching assets:', error);
+    }
 }
 function sumbitForm() {
-    let uploadImageUrl = '';
-    //check image for errors 
-    if (selectedFile.value) {
-        const formData = new FormData();
-        formData.append('image', selectedFile.value);
-        /*const res = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData
-        });
-        const data = await res.json();
-        uploadedImageUrl = data.imageUrl; 
-        */
-    }
-    /*
-    //if(uploadImageUrl !== ''){error}
-    item.image = uploadedImageUrl; // set image URL only after upload
 
-    // Now you can send `item` in your API call
-    await fetch('/api/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(item)
-    });
-    */
 }
 function cancelForm() {
     router.push('/dashboard');

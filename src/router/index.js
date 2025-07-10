@@ -21,6 +21,7 @@ const routes = [
   { path: '/catalog',                     component: Catalog,       meta: {requiredPermission: {action: 'view', resource: 'product'}} }, 
   { path: '/cart',                        component: Cart,       meta: {requiredPermission: {action: 'create', resource: 'order'}} }, 
   { path: '/order',                       component: Order,       meta: {requiredPermission: {action: 'create', resource: 'order'}} }, 
+  { path: '/assetlookup',                 component: AssetLookup,       meta: {requiredPermission: {action: 'view', resource: 'assets'}} }, 
 ]
 
 export default createRouter({
