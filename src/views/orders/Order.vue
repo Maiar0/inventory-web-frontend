@@ -109,3 +109,78 @@ function completePurchase() {
     console.log('Purchase completed with items:', items.value);
 }
 </script>
+<style scoped>
+.Order {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+    background-color: black;
+}
+
+.Order>div {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin-top: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+form input {
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button,
+.summary button {
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover,
+.summary button:hover {
+    background-color: #0056b3;
+}
+
+.items ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.items li {
+    color: black;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+h2 {
+    margin-bottom: 1rem;
+    color: #444;
+}
+
+.summary p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    color: #555;
+}
+</style>
