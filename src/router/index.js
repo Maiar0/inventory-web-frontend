@@ -8,13 +8,14 @@ import CreateProduct from '../views/product/CreateProduct.vue'
 import Catalog from '../views/product/Catalog.vue'
 import Cart from '../views/orders/Cart.vue'
 import Order from '../views/orders/Order.vue'
+import AssetLookup from '../views/utilitypages/AssetLookup.vue'
 
 const routes = [
   { path: '/dashboard',                   component: DashboardLayout },
   { path: '/home',                        component: Home },
   { path: '/',                            component: Home },
   { path: '/about',                       component: About },
-  { path: '/test',                        component: About }, //for testing vues
+  { path: '/test',                        component: AssetLookup }, //for testing vues
   { path: '/invoices/create',             component: CreateInvoice,       meta: {requiredPermission: {action: 'create', resource: 'stock'}} }, 
   { path: '/catalog/create',              component: CreateProduct,       meta: {requiredPermission: {action: 'create', resource: 'product'}} }, 
   { path: '/catalog',                     component: Catalog,       meta: {requiredPermission: {action: 'view', resource: 'product'}} }, 

@@ -1,8 +1,8 @@
 import { getAccessToken } from './authClient';
 export default class NavApi{
     constructor(){
-        const envUrl = import.meta.env.VITE_API_URL; //const envUrl = process.env.VITE_API_URL;
-        const defaultUrl = '/api/chess';
+        const envUrl = import.meta.env.VITE_API_URL; 
+        const defaultUrl = '/api';
         console.log('Computed baseUrl:', envUrl ? envUrl : defaultUrl);
         this.baseUrl = envUrl ? envUrl : defaultUrl;
     }
