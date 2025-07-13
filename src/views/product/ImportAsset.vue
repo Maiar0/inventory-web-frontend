@@ -36,10 +36,10 @@ async function submitForm() {
         return;
     }
     const formData = new FormData();
-    formData.append('file', file.value);
+    formData.append('asset', file.value);
     formData.append('name', assetName.value);
     try {
-        result = await api.fetchFormData('/asset/import', formData);
+        const result = await api.fetchFormData('/asset/create', formData);
         alert('Upload successful!');
     } catch (error) {
         console.error('Error submitting form:', error);
