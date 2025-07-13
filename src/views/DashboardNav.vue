@@ -10,7 +10,7 @@ import NavGrid from '../components/NavGrid.vue';
 
 const navItems = ref([
     {
-        name: 'Inventory Catalog',
+        name: 'Product Catalog',
         description: 'View and manage items currently in stock',
         route: '/catalog'
     },
@@ -20,12 +20,17 @@ const navItems = ref([
         route: '/catalog/create'
     },
     {
+        name: 'Product Lookup',
+        description: 'View created products',
+        route: '/productlookup'
+    },
+    {
         name: 'Cart',
         description: 'Cart of items to purchase',
         route: '/cart'
     },
     {
-        name: 'finalize order',
+        name: 'Order',
         description: 'Purchase your cart items',
         route: '/order'
     },
@@ -43,11 +48,6 @@ const navItems = ref([
         name: 'User Management',
         description: 'Manage application users and access control',
         route: 'admin/users'
-    },
-    {
-        name: 'Settings',
-        description: 'Configure system preferences and application settings',
-        route: 'settings'
     },
     {
         name: 'Asset Lookup',

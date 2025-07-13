@@ -10,6 +10,7 @@ import Cart from '../views/orders/Cart.vue'
 import Order from '../views/orders/Order.vue'
 import AssetLookup from '../views/utilitypages/AssetLookup.vue'
 import ImportAsset from '../views/product/ImportAsset.vue'
+import ProductLookup from '../views/utilitypages/ProductLookup.vue'
 
 const routes = [
   { path: '/dashboard',                   component: DashboardLayout },
@@ -24,6 +25,7 @@ const routes = [
   { path: '/order',                       component: Order,       meta: {requiredPermission: {action: 'create', resource: 'order'}} }, 
   { path: '/assetlookup',                 component: AssetLookup,       meta: {requiredPermission: {action: 'view', resource: 'asset'}} }, 
   { path: '/importasset',                 component: ImportAsset,       meta: {requiredPermission: {action: 'create', resource: 'asset'}} }, 
+  { path: '/productlookup',               component: ProductLookup,       meta: {requiredPermission: {action: 'view', resource: 'product'}} }, 
 ]
 
 export default createRouter({
