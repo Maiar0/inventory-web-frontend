@@ -15,7 +15,7 @@ const navItems = ref([
         route: '/catalog'
     },
     {
-        name: 'Inventory Catalog Create',
+        name: 'Product Create',
         description: 'View and manage items currently in stock',
         route: '/catalog/create'
     },
@@ -48,6 +48,16 @@ const navItems = ref([
         name: 'Settings',
         description: 'Configure system preferences and application settings',
         route: 'settings'
+    },
+    {
+        name: 'Asset Lookup',
+        description: 'View assets in the system',
+        route: '/assetlookup'
+    },
+    {
+        name: 'Import Asset',
+        description: 'Create a new asset.',
+        route: '/importasset'
     }
 ]);
 const route = useRoute();

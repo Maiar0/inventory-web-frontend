@@ -46,7 +46,7 @@ const assets = ref([]);
 onMounted(() => {
     fetchAssets();
 });
-async function fetchAssets() {// TODO:: we could abstract this multy use
+async function fetchAssets() {// TODO:: we could modularize this multy use
     try {
         const result = await api.fetch('/asset/assets', {
             method: 'GET'
