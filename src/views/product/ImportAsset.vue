@@ -4,17 +4,24 @@
             <div class="form-header">
                 <h2>Import Asset</h2>
             </div>
+
             <div class="form-row">
                 <label>Asset File:</label>
                 <input type="file" @change="handleFileUpload" />
             </div>
-            <div v-if="previewUrl" class="form-row image-preview">
-                <label>Preview:</label>
-                <img :src="previewUrl" alt="Preview" style="max-height: 150px; border: 1px solid #ccc;" />
+            <div v-if="previewUrl">
+                <h4>Preview:</h4>
+                <img :src="previewUrl" alt="Preview" style="max-width: 300px; border: 1px solid #ccc;" />
             </div>
             <div class="form-row">
-                <label>Asset Name:</label>
+                <label>Uploader Name:</label>
                 <input v-model="assetName" />
+            </div>
+            <div v-if="assetError" class="error-message">
+                {{ assetError }}
+            </div>
+            <div class="info">
+                <label>INFO: Choose an asset that is, 1000px in width, and between 300px-1000px in height</label>
             </div>
         </section>
         <section class="action-buttons">
@@ -30,18 +37,50 @@ const api = new ApiFetch();
 const assetName = ref('');
 const file = ref(null);
 const previewUrl = ref('');
+const assetError = ref('');
 
 function handleFileUpload(event) {
+    assetError.value = '';
+    previewUrl.value = '';
     const selected = event.target.files[0];
-    if (selected) {
-        file.value = selected;
+    if (!selected || !selected.type.startsWith('image/')) {
+        assetError.value = 'Please upload a valid image.';
+        return;
+    }
 
-        const reader = new FileReader();
-        reader.onload = () => {
+    // Check file size (2MB max)
+    const maxSizeBytes = 2 * 1024 * 1024;
+    if (selected.size > maxSizeBytes) {
+        assetError.value = 'Image must be smaller than 2MB.';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+            // Check dimensions
+            if (img.width !== 1000) {
+                assetError.value = 'Image must be 1000px in wdith.';
+                return;
+            }
+
+            if (img.height < 300 || img.height > 1000) {
+                assetError.value = 'Image must be between 300px and 1000px in height.';
+                return;
+            }
+
+            // Passed validation
+            file.value = selected;
             previewUrl.value = reader.result;
         };
-        reader.readAsDataURL(selected);
-    }
+        img.onerror = () => {
+            assetError.value = 'Failed to read image file.';
+        };
+        img.src = reader.result;
+    };
+
+    reader.readAsDataURL(selected);
 }
 
 async function submitForm() {
@@ -124,6 +163,12 @@ async function submitForm() {
     background-color: #4285f4;
     color: white;
     transition: background-color 0.2s ease;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
 }
 
 .action-buttons button:hover {
