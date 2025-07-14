@@ -1,15 +1,19 @@
 <template>
     <input type="text" v-model="searchQuery" placeholder="Search products..." />
+
     <div class="products-grid">
-        <div v-for="product in filteredProducts" class="products-grid">
-            <p>{{ product.name }}</p>
-            <p>{{ product.sku }}</p>
-            <p>{{ product.description }}</p>
-            <img v-if="product.image_url" :src="backend_url + product.image_url" alt="product Image"
-                class="product-image" @click="openProduct(product)" style="cursor:pointer" />
+        <div v-for="product in filteredProducts" :key="product.sku" class="product-card">
+            <p @click="openProduct(product)"><strong>{{ product.name + ' : ' + + product.product_id }}</strong></p>
+            <p>{{ 'SKU: ' + product.sku }}</p>
+            <p>{{ 'Description: ' + product.description }}</p>
+            <a v-if="product.image_url" :href="backend_url + product.image_url" target="_blank"
+                rel="noopener noreferrer">
+                <img :src="backend_url + product.image_url" alt="product Image" class="product-image" />
+            </a>
         </div>
     </div>
 </template>
+
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import ApiFetch from '../../api/ApiFetch';
@@ -21,9 +25,9 @@ const filteredProducts = computed(() => {
     if (!searchQuery.value) return products.value;
     const q = searchQuery.value.toLowerCase();
     return products.value.filter(product =>
+        product.product_id == q ||
         product.name.toLowerCase().includes(q) ||
-        product.sku.toLowerCase().includes(q) ||
-        product.description.toLowerCase().includes(q)
+        product.sku.toLowerCase().includes(q)
     );
 });
 onMounted(() => {
@@ -49,10 +53,12 @@ input[type="text"] {
     display: block;
     margin: 1rem auto;
     padding: 0.5rem 1rem;
-    width: 80%;
+    width: 90%;
     max-width: 500px;
     font-size: 1rem;
+    border: 1px solid #ccc;
     border-radius: 6px;
+    box-sizing: border-box;
 }
 
 .products-grid {
@@ -62,28 +68,26 @@ input[type="text"] {
     padding: 1rem;
 }
 
-.products-grid>div {
-    border: 1px solid #ddd;
-    border-radius: 8px;
+.product-card {
+    border: 1px solid #ccc;
+    border-radius: 6px;
     padding: 1rem;
     text-align: center;
-    transition: box-shadow 0.2s ease;
 }
 
-.products-grid>div:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.products-grid p {
+.product-card p {
     margin: 0.5rem 0;
     font-size: 0.95rem;
 }
 
 .product-image {
-    max-width: 150px;
-    max-height: 150px;
-    object-fit: contain;
-    margin-top: 0.5rem;
+    width: 100%;
+    height: 150px;
+    /* or whatever space you want */
+    object-fit: cover;
+    object-position: center;
     border-radius: 4px;
+    display: block;
+    margin: 0 auto;
 }
 </style>
