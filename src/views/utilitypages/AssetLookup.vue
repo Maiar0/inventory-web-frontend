@@ -23,10 +23,7 @@ const filteredAssets = computed(() => {
 });
 async function fetchAssets() {
     try {
-        const result = await api.fetch('/asset/assets', {
-            method: 'GET'
-        })
-        console.log('Assets fetched:', result);
+        const result = await api.fetchAssets();
         if (result && result.data) {
             assets.value = result.data;
         } else {

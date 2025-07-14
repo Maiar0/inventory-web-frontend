@@ -17,7 +17,7 @@
                 </div>
                 <div class="form-row">
                     <label>Image:</label>
-                    <input list="asset-options" v-model="item.image" />
+                    <input list="asset-options" v-model="item.image_url" />
                     <datalist id="asset-options">
                         <option v-for="asset in assets" :key="asset.name" :value="asset.name" />
                     </datalist>
@@ -40,18 +40,15 @@ const item = ref({
     sku: '',
     name: '',
     description: '',
-    image: ''
+    image_url: ''
 })
 const assets = ref([]);
 onMounted(() => {
     fetchAssets();
 });
-async function fetchAssets() {// TODO:: we could modularize this multy use
+async function fetchAssets() {
     try {
-        const result = await api.fetch('/asset/assets', {
-            method: 'GET'
-        })
-        console.log('Assets fetched:', result);
+        const result = await api.fetchAssets();
         if (result && result.data) {
             assets.value = result.data;
         } else {
@@ -62,7 +59,26 @@ async function fetchAssets() {// TODO:: we could modularize this multy use
     }
 }
 function sumbitForm() {
-
+    console.log('item:', item.value);
+    if (!item.value.sku || !item.value.name || !item.value.description || !item.value.image_url) {
+        alert('Please fill in all fields');
+        return;
+    }
+    api.fetch('/product/create', {
+        method: 'POST',
+        body: JSON.stringify(item.value),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(response => {
+        console.log('response:', response);
+        if (response) {
+            alert('Product created successfully');
+        }
+    }).catch(error => {
+        console.error('Error creating product:', error);
+        alert('An error occurred while creating the product');
+    });
 }
 function cancelForm() {
     router.push('/dashboard');
