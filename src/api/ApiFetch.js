@@ -6,6 +6,26 @@ export default class ApiFetch {
         console.log('Computed baseUrl:', apiUrl ? apiUrl : defaultUrl);
         this.baseUrl = apiUrl ? apiUrl : defaultUrl;
     }
+    async get(url){
+        return await this.fetch(url, {
+            method: 'GET'
+        })
+    }
+    async post(url, data){
+        return await this.fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+    }
+    async put(url, data){
+        return await this.fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify(data)
+        })
+    }
+    async delete(url){
+        return await this.fetch(url,{ method:'DELETE'})
+    }
 
     async fetch(url, options = {}) {
         const token = await getAccessToken();
