@@ -66,16 +66,4 @@ export default class ApiFetch {
 
         return res.json();
     }
-    async fetchAssets() {//this should probably go in a datamanager
-    try {
-        const result = await this.fetch('/asset/assets', {
-            method: 'GET'
-        })
-        console.log('Assets fetched:', result);
-        return result;
-    } catch (error) {
-        console.error('Error fetching assets:', error);
-        }
-        return [];
-    }
 }

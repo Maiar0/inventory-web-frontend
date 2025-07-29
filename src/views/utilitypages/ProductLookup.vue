@@ -16,9 +16,9 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import ApiFetch from '../../api/ApiFetch';
+import { useDataManager } from '../../composables/useDataManager';
+const { getData } = useDataManager();
 const backend_url = import.meta.env.VITE_PUBLIC_URL + "/images/";
-const api = new ApiFetch();
 const products = ref([]);
 const searchQuery = ref('');
 const filteredProducts = computed(() => {
@@ -34,9 +34,7 @@ onMounted(() => {
     fetchProducts();
 });
 function fetchProducts() {
-    api.fetch('/product/products', {
-        method: 'GET'
-    }).then(result => {
+    getData('products').then(result => {
         console.log('Products fetched:', result);
         if (result && result.data) {
             products.value = result.data;

@@ -8,9 +8,9 @@
 </template>
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import ApiFetch from '../../api/ApiFetch';
-const backend_url = import.meta.env.VITE_PUBLIC_URL
-const api = new ApiFetch();
+const backend_url = import.meta.env.VITE_PUBLIC_URL;
+import { useDataManager } from '../../composables/useDataManager';
+const { getData } = useDataManager();
 const assets = ref([]);
 onMounted(() => {
     fetchAssets();
@@ -22,16 +22,16 @@ const filteredAssets = computed(() => {
     return assets.value.filter(asset => asset.name.toLowerCase().includes(q));
 });
 async function fetchAssets() {
-    try {
-        const result = await api.fetchAssets();
+    getData('assets').then(result => {
+        console.log('Assets fetched');
         if (result && result.data) {
             assets.value = result.data;
         } else {
             console.error('No data found in the response');
         }
-    } catch (error) {
+    }).catch(error => {
         console.error('Error fetching assets:', error);
-    }
+    });
 }
 function openAsset(asset) {
     const url = backend_url + asset.image_url;

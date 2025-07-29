@@ -32,10 +32,10 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import ApiFetch from '../../api/ApiFetch';
 import { useRouter } from 'vue-router'
+import { useDataManager } from '../../composables/useDataManager';
+const { getData } = useDataManager();
 const router = useRouter();
-const api = new ApiFetch();
 const item = ref({
     sku: '',
     name: '',
@@ -47,16 +47,16 @@ onMounted(() => {
     fetchAssets();
 });
 async function fetchAssets() {
-    try {
-        const result = await api.fetchAssets();
+    getData('assets').then(result => {
+        console.log('Assets fetched');
         if (result && result.data) {
             assets.value = result.data;
         } else {
             console.error('No data found in the response');
         }
-    } catch (error) {
+    }).catch(error => {
         console.error('Error fetching assets:', error);
-    }
+    });
 }
 function sumbitForm() {
     console.log('item:', item.value);

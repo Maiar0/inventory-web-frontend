@@ -75,7 +75,7 @@ import ApiFetch from '../api/ApiFetch';
 const api = new ApiFetch();
 
 const fetchData = async (key) => {
-    const endpoint = '';
+    let endpoint = '';
     try{
         switch(key){
             case 'assets':
