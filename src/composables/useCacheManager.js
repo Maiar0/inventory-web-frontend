@@ -166,7 +166,7 @@ const getMultipleData = async (keys) => {
     return await Promise.all(promises);
 }
 
-export const useDataManager = () => {
+export const useCacheManager = () => {
     return {
         // Core methods
         getData,           // Get data (cached if fresh)

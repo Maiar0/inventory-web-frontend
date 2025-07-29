@@ -9,8 +9,8 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 const backend_url = import.meta.env.VITE_PUBLIC_URL;
-import { useDataManager } from '../../composables/useDataManager';
-const { getData } = useDataManager();
+import { useCacheManager } from '../../composables/useCacheManager';
+const { getData } = useCacheManager();
 const assets = ref([]);
 onMounted(() => {
     fetchAssets();

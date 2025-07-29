@@ -33,8 +33,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router'
-import { useDataManager } from '../../composables/useDataManager';
-const { getData } = useDataManager();
+import { useCacheManager } from '../../composables/useCacheManager';
+const { getData } = useCacheManager();
 const router = useRouter();
 const item = ref({
     sku: '',

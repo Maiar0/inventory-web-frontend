@@ -16,8 +16,8 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { useDataManager } from '../../composables/useDataManager';
-const { getData } = useDataManager();
+import { useCacheManager } from '../../composables/useCacheManager';
+const { getData } = useCacheManager();
 const backend_url = import.meta.env.VITE_PUBLIC_URL + "/images/";
 const products = ref([]);
 const searchQuery = ref('');
