@@ -25,14 +25,13 @@ const password = ref('');
 const errorMessage = ref('');
 
 const handleLogin = async () => {
-    console.log('Trying to log in with:', email.value, password.value);
+
 
     const { data, error } = await supabase.auth.signInWithPassword({
         email: email.value,
         password: password.value
     })
 
-    console.log(data, error);
     if (error) {
         errorMessage.value = error.message;
     } else {

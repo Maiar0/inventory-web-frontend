@@ -48,7 +48,6 @@ onMounted(() => {
 });
 async function fetchAssets() {
     getData('assets').then(result => {
-        console.log('Assets fetched');
         if (result && result.data) {
             assets.value = result.data;
         } else {

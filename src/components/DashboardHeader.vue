@@ -18,7 +18,6 @@ import { computed } from 'vue';
 const route = useRoute();
 
 const breadcrumb = computed(() => {
-    console.log(route.path)
     return route.path.split('/').filter(Boolean).map(segment => segment.charAt(0).toUpperCase() + segment.slice(1));
 });
 

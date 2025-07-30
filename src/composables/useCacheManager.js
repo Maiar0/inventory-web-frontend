@@ -108,6 +108,7 @@ const fetchData = async (key) => {
         cache[key].data = await api.get(endpoint);
         cache[key].lastFetched = Date.now();
         cache[key].error = null;
+        console.log('Data fetched for key: ', key);
         return cache[key].data;
     } catch (error) {
         cache[key].error = error;

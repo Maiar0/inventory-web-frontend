@@ -35,7 +35,6 @@ onMounted(() => {
 });
 function fetchProducts() {
     getData('products').then(result => {
-        console.log('Products fetched:', result);
         if (result && result.data) {
             products.value = result.data;
         } else {

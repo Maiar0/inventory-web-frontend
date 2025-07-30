@@ -72,7 +72,6 @@ function addItemToCart(item) {
     addItem(item.id, item.quantity);
 }
 function goToCart(where) {
-    console.log('clicked cart')
     router.push('/cart')
 }
 

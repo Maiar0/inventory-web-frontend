@@ -26,7 +26,6 @@ export default class NavApi{
         return res.json();
     }
     async getNavigation(path){
-        console.log('Requesting Nav:', path )
         const token = await getAccessToken();
         const res = await fetch (this.baseUrl + '/nav' + path, {
             method: 'GET',

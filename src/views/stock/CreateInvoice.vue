@@ -67,15 +67,16 @@
             <td class="product-search">
               <input type="text" v-model="item.product_id" @input="filterProductList(item)"
                 @focus="item.showDropdown = true" @blur="hideDropdown(item)" placeholder="Search Product ID" />
-              <ul v-if="item.showDropdown && item.filteredProducts?.length" class="dropdown">
-                <li v-for="id in item.filteredProducts" :key="id" @mousedown.prevent="selectProduct(item, id)">
-                  {{ id }}
-                </li>
-              </ul>
+              <div v-if="item.showDropdown" class="dropdown">
+                <div v-for="product in item.filteredProducts" :key="product.product_id"
+                  @click="selectProduct(item, product)" class="dropdown-item">
+                  {{ product.product_id }} | {{ product.name }} | {{ product.sku }}
+                </div>
+              </div>
             </td>
             <td><input v-model="item.quantity" type="number" /> </td>
             <td><input v-model="item.unit_cost" type="number" step="0.01" /> </td>
-            <td><input :value="item.quantity * item.unit_cost" disabled /></td>
+            <td><input :value="(item.quantity * item.unit_cost).toFixed(2)" disabled /></td>
             <td><button @click="removeItem(index)">Remove</button></td>
           </tr>
         </tbody>
@@ -83,16 +84,18 @@
       <button @click="addItem">+ Add Line Item</button>
     </section>
     <div class="form-actions">
-      <button @click="sumbitForm">Save Invoice</button>
+      <button @click="submitForm">Save Invoice</button>
       <button @click="cancelForm">Cancel</button>
     </div>
   </div>
 </template>
 <script setup>
-import { reactive, computed } from 'vue';
+import { reactive, computed, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useCacheManager } from '../../composables/useCacheManager';
+const { getData } = useCacheManager();
 const router = useRouter();
-const fullProductList = ['001', '002', '1bcd', 'abcd', 'bugs', 'builds', 'zebra'];// await getProductList();
+const fullProductList = ref([]);
 const invoice = reactive({
   supplier_id: '',
   invoice_date: '',
@@ -108,16 +111,32 @@ const invoice = reactive({
 const invoiceItems = reactive([
   { product_id: '', quantity: 0, unit_cost: 0, filteredProducts: [], showDropdown: false }
 ])
-
+onMounted(() => {
+  //get products from cache
+  getData('products').then(result => {
+    if (result && result.data) {
+      fullProductList.value = result.data;
+    } else {
+      console.error('No data found in the response');
+    }
+  });
+});
 function filterProductList(item) {
+  if (!item.product_id) return;
+  console.log('filtering product list for: ', item.product_id);
   const query = item.product_id.toLowerCase();
-  item.filteredProducts = fullProductList.filter(id =>
-    id.toLowerCase().includes(query)
+  const filtered = fullProductList.value.filter(product =>
+    product.product_id === query ||
+    product.sku.includes(query) ||
+    product.name.toLowerCase().includes(query)
   );
+  item.filteredProducts = filtered.slice(0, 10);
 }
 
-function selectProduct(item, id) {
-  item.product_id = id;
+function selectProduct(item, product) {
+  item.product_id = product.product_id;
+  item.name = product.name;
+  item.sku = product.sku;
   item.showDropdown = false;
 }
 
@@ -136,10 +155,41 @@ function removeItem(index) {
 const computedInvoiceTotal = computed(() => {
   const subtotal = invoiceItems.reduceRight((sum, item) => sum + item.quantity * item.unit_cost, 0);
   const tax = invoice.tax_amount || (invoice.tax_rate ? (subtotal) * (invoice.tax_rate / 100) : 0);
-  return (subtotal + invoice.shipping_cost + tax).toFixed(2);
+  return (subtotal + invoice.shipping_cost + tax).toFixed(2) || 0;
 })
 function submitForm() {
   console.log('sumbit form');
+  if (invoice.created_by === '' || invoice.created_by === null) {
+    alert('Please enter a created by');
+    return;
+  }
+  if (invoice.supplier_invoice_id === '' || invoice.supplier_invoice_id === null) {
+    alert('Please enter a supplier invoice ID');
+    return;
+  }
+  if (invoice.invoice_date === '' || invoice.invoice_date === null) {
+    alert('Please enter an invoice date');//TODO: add date validation
+    return;
+  }
+  if (invoice.supplier_id == '') {
+    alert('Please enter a supplier ID');
+    return;
+  }
+  if (invoice.invoice_date === '') {
+    alert('Please enter an invoice date');
+  }
+  if (invoiceItems.length === 0) {
+    alert('Please add at least one item to the invoice');
+    return;
+  }
+  for (const item of invoiceItems) {
+    if (!item.product_id || item.quantity <= 0) {
+      alert('Please ensure all items have a valid product and quantity');
+      return;
+    }
+  }
+  console.log('invoice', invoice, invoiceItems);
+
 }
 function cancelForm() {
   router.push('/dashboard');
@@ -184,6 +234,18 @@ function openProductHelper() {
 
 .form-row input {
   width: 60%;
+}
+
+.dropdown-item {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #8b8585;
 }
 
 table {

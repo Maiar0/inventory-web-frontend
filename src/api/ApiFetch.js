@@ -36,7 +36,6 @@ export default class ApiFetch {
         };
         
         const res = await fetch(this.baseUrl + url, options);
-        console.log('res:', res);
         if (!res.ok) {
             const { error } = await res.json();
             const err = new Error(error.message);

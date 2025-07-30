@@ -63,7 +63,7 @@ const navItems = ref([
 const route = useRoute();
 const router = useRouter();
 onMounted(() => {
-    console.log('navItems:', navItems.value);
+
 });
 function goDeeper(newPath) {
     console.log(newPath)
