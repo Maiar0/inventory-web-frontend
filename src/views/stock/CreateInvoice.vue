@@ -26,7 +26,7 @@
         </div>
         <div class="form-row">
           <label>Tax Amount:</label>
-          <input v-model.number="invoice.tax_amount" type="number" step="0.01" />
+          <input v-model.number="invoice.tax_amount" type="number" step="0.01" :default="computedTaxAmount" />
         </div>
         <div class="form-row">
           <label>Invoice Total:</label>
@@ -92,6 +92,8 @@
 <script setup>
 import { reactive, computed, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import ApiFetch from '../../api/ApiFetch';
+const api = new ApiFetch();
 import { useCacheManager } from '../../composables/useCacheManager';
 const { getData } = useCacheManager();
 const router = useRouter();
@@ -103,9 +105,9 @@ const invoice = reactive({
   shipping_cost: 0,
   tax_rate: 0,
   tax_amount: 0,
-  ovverride_total: null,
-  asjustment_reason: '',
-  created_by: '',
+  override_total: null,
+  adjustment_reason: '',
+  created_by: '',//TOOC:: Remove
   supplier_invoice_id: ''
 })
 const invoiceItems = reactive([
@@ -153,18 +155,50 @@ function removeItem(index) {
   invoiceItems.splice(index, 1);
 }
 const computedInvoiceTotal = computed(() => {
-  const subtotal = invoiceItems.reduceRight((sum, item) => sum + item.quantity * item.unit_cost, 0);
-  const tax = invoice.tax_amount || (invoice.tax_rate ? (subtotal) * (invoice.tax_rate / 100) : 0);
-  return (subtotal + invoice.shipping_cost + tax).toFixed(2) || 0;
+  // Convert all values to numbers, handling empty strings and invalid values
+  const subtotal = invoiceItems.reduceRight((sum, item) => {
+    const quantity = Number(item.quantity) || 0;
+    const unitCost = Number(item.unit_cost) || 0;
+    return sum + (quantity * unitCost);
+  }, 0);
+
+  const shippingCost = Number(invoice.shipping_cost) || 0;
+  const taxRate = Number(invoice.tax_rate) || 0;
+  const taxAmount = Number(invoice.tax_amount) || 0;
+
+  // Calculate tax if not manually set
+  const tax = taxAmount || (taxRate ? (subtotal * taxRate / 100) : 0);
+
+  // Check for NaN values
+  if (isNaN(subtotal) || isNaN(shippingCost) || isNaN(tax)) {
+    return '0.00';
+  }
+
+  const total = subtotal + shippingCost + tax;
+  return total.toFixed(2);
+})
+const computedTaxAmount = computed(() => {
+  const subtotal = invoiceItems.reduceRight((sum, item) => {
+    const quantity = Number(item.quantity) || 0;
+    const unitCost = Number(item.unit_cost) || 0;
+    return sum + (quantity * unitCost);
+  }, 0);
+
+  const taxRate = Number(invoice.tax_rate) || 0;
+  const result = (subtotal * taxRate / 100).toFixed(2);
+
+  // Only update tax_amount if it's not manually set
+  if (invoice.tax_amount === 0 || isNaN(invoice.tax_amount)) {
+    invoice.tax_amount = result;
+  }
+
+  return result;
 })
 function submitForm() {
   console.log('sumbit form');
-  if (invoice.created_by === '' || invoice.created_by === null) {
-    alert('Please enter a created by');
-    return;
-  }
+  //TODO:: createdby will be blank needs removed
   if (invoice.supplier_invoice_id === '' || invoice.supplier_invoice_id === null) {
-    alert('Please enter a supplier invoice ID');
+    alert('Please enter a supplier invoice ID');//this is suppose to be a UUID
     return;
   }
   if (invoice.invoice_date === '' || invoice.invoice_date === null) {
@@ -189,7 +223,30 @@ function submitForm() {
     }
   }
   console.log('invoice', invoice, invoiceItems);
-
+  api.post('/invoice/create', {
+    invoice: {
+      supplier_id: invoice.supplier_id,
+      invoice_date: invoice.invoice_date,
+      shipping_method: invoice.shipping_method,
+      shipping_cost: invoice.shipping_cost,
+      tax_rate: invoice.tax_rate / 100,
+      tax_amount: computedTaxAmount.value,
+      invoice_total: computedInvoiceTotal.value,
+      supplier_invoice_id: invoice.supplier_invoice_id,
+      adjustment_reason: invoice.adjustment_reason,
+      override_total: invoice.override_total
+    },
+    invoiceItems: invoiceItems.map(item => ({
+      product_id: item.product_id,
+      quantity: item.quantity,
+      unit_cost: item.unit_cost
+    }))
+  }).then(result => {
+    alert(`Invoice # ${result.data.invoice_id} created successfully!`);
+    console.log('result', result);
+  }).catch(error => {
+    console.error('error', error);
+  });
 }
 function cancelForm() {
   router.push('/dashboard');
