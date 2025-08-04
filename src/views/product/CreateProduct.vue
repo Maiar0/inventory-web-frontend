@@ -1,4 +1,6 @@
 <template>
+    <button @click="openAssetHelper">🔍 Search Assets</button>
+    <button @click="importAsset">📤 Import Assets</button>
     <div class="container">
         <div class="card">
             <div class="card-header-invisible">
@@ -67,6 +69,12 @@ const showDropdown = ref(false);
 onMounted(() => {
     fetchAssets();
 });
+function openAssetHelper() {
+    window.open('/assetlookup', '_blank', 'width=800,height=800');
+}
+function importAsset() {
+    window.open('/importasset', '_blank', 'width=800,height=800');
+}
 
 async function fetchAssets() {
     getData('assets').then(result => {
