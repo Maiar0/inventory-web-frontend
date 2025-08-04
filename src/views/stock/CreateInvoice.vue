@@ -247,7 +247,7 @@ function cancelForm() {
   router.push('/dashboard');
 }
 function openProductHelper() {
-  window.open('productId-directory.html', '_blank', 'width=800', 'height=800');
+  window.open('/productlookup', '_blank', 'width=800,height=800');
 }
 </script>
 <style scoped>
