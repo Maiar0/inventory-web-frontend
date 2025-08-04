@@ -1,13 +1,15 @@
 <template>
-    <header class="dashboard-header">
-        <ul class="breadcrumb">
-            <li v-for="(item, i) in breadcrumb" :key="i">
-                {{ item }}
-                <span v-if="i < breadcrumb.length - 1"> / </span>
-            </li>
-        </ul>
-        <div class="user-info">
-            Logged in as: <strong>{{ username }}</strong>
+    <header class="nav">
+        <div class="nav-container">
+            <nav class="flex gap-sm items-center">
+                <span v-for="(item, i) in breadcrumb" :key="i" class="flex items-center">
+                    <span class="text-muted">{{ item }}</span>
+                    <span v-if="i < breadcrumb.length - 1" class="text-muted mx-sm">/</span>
+                </span>
+            </nav>
+            <div class="text-sm text-muted">
+                Logged in as: <strong class="text-primary">{{ username }}</strong>
+            </div>
         </div>
     </header>
 </template>
@@ -15,6 +17,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
+
 const route = useRoute();
 
 const breadcrumb = computed(() => {
@@ -25,31 +28,9 @@ const username = localStorage.getItem('username');
 </script>
 
 <style scoped>
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: #1f1f1f;
-    color: white;
-    border-bottom: 1px solid #333;
-}
-
-.breadcrumb {
-    display: flex;
-    /* Apply here */
-    gap: 0.5rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.user-info {
-    font-size: 0.9rem;
-}
-
-.breadcrumb li {
-    display: flex;
-    align-items: center;
+/* Component-specific styles only */
+.mx-sm {
+    margin-left: var(--spacing-sm);
+    margin-right: var(--spacing-sm);
 }
 </style>

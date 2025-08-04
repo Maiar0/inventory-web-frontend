@@ -1,16 +1,17 @@
 <template>
-    <div class="nav-grid">
-        <div v-for="item in items" :key="item.name" class="grid-item" @click="$emit('select', item.route)">
-            <h2>{{ item.name }}</h2>
-            <p>{{ item.description }}</p>
+    <div class="grid grid-3 gap-lg">
+        <div v-for="item in items" :key="item.name"
+            class="card cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1"
+            @click="$emit('select', item.route)">
+            <div class="card-body">
+                <h3 class="text-lg font-semibold mb-sm">{{ item.name }}</h3>
+                <p class="text-muted text-sm">{{ item.description }}</p>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-
-
 defineProps({
     items: {
         type: Array,
@@ -20,37 +21,20 @@ defineProps({
 </script>
 
 <style scoped>
-.nav-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-}
-
-.grid-item {
-    flex: 0 0 auto;
-    min-width: 200px;
-    padding: 1rem;
-    border: 2px solid #444;
-    border-radius: 8px;
-    background-color: #1e1e1e;
+/* Component-specific styles only */
+.cursor-pointer {
     cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-.grid-item:hover {
-    transform: translateY(-4px);
-    border-color: #888;
+.transition-all {
+    transition: all var(--transition-normal);
 }
 
-.grid-item h2 {
-    color: white;
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
+.hover\:shadow-lg:hover {
+    box-shadow: var(--shadow-lg);
 }
 
-.grid-item p {
-    font-size: 0.95rem;
-    color: #ccc;
+.hover\:-translate-y-1:hover {
+    transform: translateY(-0.25rem);
 }
 </style>
