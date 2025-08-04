@@ -41,10 +41,6 @@
           <input v-model="invoice.adjustment_reason" type="text" />
         </div>
         <div class="form-row">
-          <label>Created By:</label>
-          <input v-model="invoice.created_by" type="text" />
-        </div>
-        <div class="form-row">
           <label>Supplier Invoice #:</label>
           <input v-model="invoice.supplier_invoice_id" type="text" />
         </div>
@@ -107,7 +103,6 @@ const invoice = reactive({
   tax_amount: 0,
   override_total: null,
   adjustment_reason: '',
-  created_by: '',//TOOC:: Remove
   supplier_invoice_id: ''
 })
 const invoiceItems = reactive([

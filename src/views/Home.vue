@@ -1,14 +1,23 @@
 <template>
-    <div class="home-container">
-        <h1>Home</h1>
-        <div class="login-box">
-            <h2>Login</h2>
-            <form @submit.prevent="handleLogin">
-                <input v-model="email" type="email" placeholder="Email" required />
-                <input v-model="password" type="password" placeholder="Password" required />
-                <button type="submit">Login</button>
-            </form>
-            <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    <div class="container">
+        <div class="flex flex-col items-center justify-center min-h-screen">
+            <h1>Home</h1>
+            <div class="card p-lg" style="max-width: 400px; width: 100%;">
+                <h2 class="text-center">Login</h2>
+                <form @submit.prevent="handleLogin" class="flex flex-col gap-md">
+                    <div>
+                        <label for="email">Email</label>
+                        <input id="email" v-model="email" type="email" placeholder="Enter your email" required />
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <input id="password" v-model="password" type="password" placeholder="Enter your password"
+                            required />
+                    </div>
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+                <p v-if="errorMessage" class="text-error text-center m-md">{{ errorMessage }}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -25,8 +34,6 @@ const password = ref('');
 const errorMessage = ref('');
 
 const handleLogin = async () => {
-
-
     const { data, error } = await supabase.auth.signInWithPassword({
         email: email.value,
         password: password.value
@@ -40,45 +47,8 @@ const handleLogin = async () => {
         router.push('/dashboard');
     }
 }
-
 </script>
 
 <style scoped>
-.home-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-    color: #ffffff;
-    text-align: center;
-}
-
-.login-box {
-    background-color: #222;
-    padding: 2rem;
-    border-radius: 10px;
-    display: inline-block;
-}
-
-input {
-    display: block;
-    width: 100%;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    border-radius: 4px;
-    border: none;
-}
-
-button {
-    padding: 0.5rem 1.5rem;
-    background-color: darkslateblue;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.error {
-    margin-top: 1rem;
-    color: #ff5c5c;
-}
+/* Component-specific styles only */
 </style>
