@@ -550,6 +550,10 @@ tr:hover {
   tr:hover {
     background-color: var(--gray-800);
   }
+  
+  .btn-ghost:hover {
+    background-color: var(--gray-800);
+  }
 }
 
 /* App Container */
