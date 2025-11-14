@@ -1,82 +1,57 @@
 <template>
-    <div class="container">
-        <div class="grid grid-2 gap-lg">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Shipping Information</h2>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="name">Name:</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Address:</label>
-                            <input type="text" id="address" name="address" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="city">City:</label>
-                            <input type="text" id="city" name="city" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="state">State:</label>
-                            <input type="text" id="state" name="state" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="zip">Zip Code:</label>
-                            <input type="text" id="zip" name="zip" required>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    <div class="page-container">
+        <div class="order-section">
+            <h2>Order Items</h2>
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in items" :key="item.product_id" class="order-item">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.price.toFixed(2) }}</td>
+                        <td>${{ (item.price * item.quantity).toFixed(2) }}</td>
+                    </tr>
+                    <tr class="order-total">
+                        <td colspan="3" class="text-right font-semibold">Total Items: {{ items.length }}</td>
+                        <td class="font-semibold">${{ total.toFixed(2) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="billing-section">
             <div class="card">
                 <div class="card-header">
                     <h2>Billing Information</h2>
                 </div>
                 <div class="card-body">
                     <form>
-                        <div class="form-group">
-                            <label for="card-name">Cardholder Name:</label>
-                            <input type="text" id="card-name" name="card-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="card-number">Card Number:</label>
-                            <input type="text" id="card-number" name="card-number" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="expiry">Expiry Date:</label>
-                            <input type="text" id="expiry" name="expiry" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="cvv">CVV:</label>
-                            <input type="text" id="cvv" name="cvv" required>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="company-name">Company</label>
+                                <input type="text" id="company-name" name="company-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="division-name">Division</label>
+                                <input type="text" id="division-name" name="division-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dept-name">Attention</label>
+                                <input type="text" id="dept-name" name="dept-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-        <div class="grid grid-2 gap-lg mt-lg">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Order Items</h2>
-                </div>
-                <div class="card-body">
-                    <ul class="order-items">
-                        <li v-for="item in items" :key="item.product_id" class="order-item">
-                            {{ item.name }} - {{ item.quantity }} x ${{ item.price.toFixed(2) }}
-                        </li>
-                    </ul>
-                    <p class="text-lg font-semibold mt-md">Total: ${{ total.toFixed(2) }}</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h2>Order Summary</h2>
-                </div>
-                <div class="card-body">
-                    <p>Total Items: {{ items.length }}</p>
-                    <p class="text-lg font-semibold">Total Price: ${{ total.toFixed(2) }}</p>
                     <button @click="completePurchase" class="btn-primary mt-md">Order</button>
                 </div>
             </div>
@@ -145,11 +120,70 @@ function completePurchase() {
 }
 </script>
 <style scoped>
-/* Component-specific styles only */
-.form-group {
+/* Main container - full width stacked layout */
+.page-container {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
+    width: 100%;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+}
+
+/* Order section - top portion */
+.order-section {
+    width: 100%;
+}
+
+.order-section h2 {
+    margin-bottom: var(--spacing-md);
+}
+
+/* Order table styling */
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border-light);
+    background-color: var(--bg-primary);
+}
+
+.order-table thead {
+    background-color: var(--bg-secondary);
+}
+
+.order-table th {
+    padding: var(--spacing-md);
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--border-light);
+}
+
+.order-table td {
+    padding: var(--spacing-md);
+    background-color: var(--bg-primary);
+}
+
+.order-item td {
+    text-align: left;
+}
+
+.order-total {
+    background-color: var(--bg-secondary);
+    font-weight: 600;
+}
+
+.order-total td:first-child {
+    text-align: right;
+}
+
+/* Billing section - bottom portion */
+.billing-section {
+    width: 100%;
+}
+
+.card {
+    width: 100%;
+    border: 1px solid var(--border-light);
+    background-color: var(--bg-primary);
 }
 
 .card-header {
@@ -158,17 +192,38 @@ function completePurchase() {
     background-color: var(--bg-secondary);
 }
 
-.order-items {
-    list-style-type: none;
-    padding: 0;
+.card-header h2 {
+    margin: 0;
 }
 
-.order-item {
-    padding: var(--spacing-sm) 0;
-    border-bottom: 1px solid var(--border-light);
+.card-body {
+    padding: var(--spacing-lg);
 }
 
-.order-item:last-child {
-    border-bottom: none;
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.form-group label {
+    font-weight: 500;
+}
+
+.form-group input {
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+}
+
+.btn-primary {
+    margin-top: var(--spacing-md);
 }
 </style>
