@@ -1,7 +1,15 @@
 <template>
-    <CatalogHeader @select="goToCart" />
-    <input class="filter" v-model="searchQuery" type="text" placeholder="Search Products" />
-    <CatalogGrid :items="catalogFilteredItems" @select="goToItem" @addToCart="addItemToCart" />
+    <div v-if="isLoading('catalog')" class="loading">
+        Loading catalog...
+    </div>
+    <div v-else-if="error" class="error">
+        Error loading catalog: {{ error }}
+    </div>
+    <div v-else>
+        <CatalogHeader @select="goToCart" />
+        <input class="filter" v-model="searchQuery" type="text" placeholder="Search Products" />
+        <CatalogGrid :items="catalogFilteredItems" @select="goToItem" @addToCart="addItemToCart" />
+    </div>
 </template>
 <script setup>
 import { ref, reactive, onMounted, watch, computed } from 'vue';
@@ -9,52 +17,41 @@ import { useRoute, useRouter } from 'vue-router';
 import CatalogGrid from '../../components/CatalogGrid.vue'
 import CatalogHeader from '../../components/CatalogHeader.vue';
 import { useCart } from '../../composables/useCart';
-const { addItem } = useCart();
+import { useCacheManager } from '../../composables/useCacheManager';
 const router = useRouter();
+const { addItem } = useCart();
 const searchQuery = ref('');
-const catalogItems = ref([
-    {
-        product_id: 'P001',
-        sku: 'SKU-001',
-        name: 'Industrial Hammer',
-        description: 'Durable steel hammer used for heavy-duty work.',
-        image_url: '/images/gecko.jpg',
-        price: 19.99
-    },
-    {
-        product_id: 'P002',
-        sku: 'SKU-002',
-        name: 'Electric Screwdriver',
-        description: 'Rechargeable screwdriver with torque control.',
-        image_url: '/images/gecko.jpg',
-        price: 24.50
-    },
-    {
-        product_id: 'P003',
-        sku: 'SKU-003',
-        name: 'Precision Wrench Set',
-        description: '10-piece set with metric and imperial sizes.',
-        image_url: '/images/gecko.jpg',
-        price: 34.95
-    },
-    {
-        product_id: 'P004',
-        sku: 'SKU-004',
-        name: 'Heavy-Duty Tape Measure',
-        description: '25ft retractable tape with magnetic hook.',
-        image_url: '/images/gecko.jpg',
-        price: 9.75
-    },
-    {
-        product_id: 'P005',
-        sku: 'SKU-005',
-        name: 'Cordless Drill',
-        description: '18V drill with dual-speed settings and LED light.',
-        image_url: '/images/gecko.jpg',
-        price: 49.00
-    }
-]);
 
+const { getData, isLoading, getError } = useCacheManager();
+const catalogData = ref([]);
+const catalogItems = ref([]);
+const error = ref(null);
+onMounted(async () => {//populate catalog Data
+    try {
+        const catalogCache = await getData('catalog');
+        catalogData.value = catalogCache.data;
+
+        catalogItems.value = catalogData.value.map(item => ({
+            ...item,
+            price: 1.00
+        }));
+    } catch (err) {
+        error.value = err;
+        console.error('[Catalog.vue]Error fetching catalog data:', err);
+    }
+})
+watch(//watch for catalog data to change
+    () => catalogData.value,
+    (newData) => {
+        console.log('Catalog data updated:', newData);
+    },
+    { deep: true }
+);
+
+
+const populate = () => {
+    //fetch catalog items from API in real app
+};
 const catalogFilteredItems = computed(() => {
     if (!searchQuery.value) return catalogItems.value;
     const q = searchQuery.value.toLocaleLowerCase();

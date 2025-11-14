@@ -26,7 +26,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-const backend_url = import.meta.env.VITE_PUBLIC_URL;
+const backend_url = import.meta.env.VITE_PUBLIC_URL + '/images/';
 const quantities = ref({});
 
 const emit = defineEmits(['select', 'addToCart']);
